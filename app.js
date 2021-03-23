@@ -37,11 +37,11 @@ var server = http.createServer((req, res) => {   // 2 - creating server
                     }
                     selectedMoveIndices.push(randomIndex);
 
-                    moveListString.push(validMoveList[randomIndex].name.replace(/-/g, ' '));
+                    moveListString.push(validMoveList[randomIndex].name.replace(/-/g, ' ').toUpperCase());
                 }
 
                 // GENERATE RANDOM ABILITY HERE
-                const selectedAbility = abilities[getRandomInt(abilities.length)].ability.name.replace(/-/g, ' ');
+                const selectedAbility = abilities[getRandomInt(abilities.length)].ability.name.replace(/-/g, ' ').toUpperCase();
 
                 // SEND RESPONSE HERE
                 res.writeHead(200, { 'Content-Type': 'text/html' });
@@ -50,12 +50,12 @@ var server = http.createServer((req, res) => {   // 2 - creating server
 [div align="center"]<br />
 [div][attr="class","wildtemp"]<br />
 [div][attr="class","wildbgsaf"][/div]<br />
-[div][attr="class","wildtitle"]A WILD ${name} APPEARED![/div] 
+[div][attr="class","wildtitle"]A WILD ${name.toUpperCase()} APPEARED![/div] 
 [div][attr="class","wildshiny"][img src="https://i.imgur.com/Ht4F0n8.png" style="max-width:100%;opacity:0;"][/div] <br />
 [div][attr="class","wildpkmnbox"]<br />
 [div][attr="class","wildpkmn"]<br />
 
-[img style="max-width:100%;" src="https://www.pkparaiso.com/imagenes/espada_escudo/sprites/animados/${name}.gif" alt=" "] <br />
+[img style="max-width:100%;" src="https://projectpokemon.org/images/normal-sprite/${name}.gif" alt=" "] <br />
 
 [/div][/div]<br />
 
