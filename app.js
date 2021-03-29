@@ -10,16 +10,31 @@ function getRandomInt(max) {
 var server = http.createServer((req, res) => {   // 2 - creating server
     if (req.url.includes('/')) {
         let typeString = req.url.substr(1);
-        pokedex.getTypeByName(typeString).then((typeResponse) => {
-            let randomPokemonIndex = getRandomInt(typeResponse.pokemon.length);
-            console.log(typeResponse.pokemon[randomPokemonIndex].pokemon.name);
-            pokedex.getPokemonByName(typeResponse.pokemon[randomPokemonIndex].pokemon.name).then((pokemonResponse) => {
+        pokedex.getTypeByName(typeString).then(async (typeResponse) => {
+            let isValidPokemon = false;
+            let orgName = null;
+            let isGenderless = false;
+            while (!isValidPokemon) {
+                const randomPokemonIndex = getRandomInt(typeResponse.pokemon.length);
+                orgName = typeResponse.pokemon[randomPokemonIndex].pokemon.name;
+                console.log("orgName", orgName);
+                try {
+                    const speciesData = await pokedex.getPokemonSpeciesByName(orgName);
+                    isValidPokemon = !speciesData.is_legendary && !speciesData.is_mythical;
+                    isGenderless = speciesData.gender_rate == -1;
+                    console.log("GENDER RATE", speciesData.gender_rate);
+                } catch (err) { }
+            }
+            console.log(orgName);
+            pokedex.getPokemonByName(orgName).then((pokemonResponse) => {
+                //console.log(pokemonResponse);
                 const name = pokemonResponse.name;
                 const moves = pokemonResponse.moves;
                 const abilities = pokemonResponse.abilities;
                 const imageUrl = pokemonResponse.sprites.front_default;
 
-                const gender = getRandomInt(100) > 50 ? "MALE" : "FEMALE";
+                let gender = getRandomInt(100) > 50 ? "MALE" : "FEMALE";
+                if (isGenderless) gender = "GENDERLESS";
                 // GENERATE RANDOM MOVES HERE
                 let validMoveList = [];
                 moves.forEach(moveInfo => {
@@ -89,7 +104,7 @@ var server = http.createServer((req, res) => {   // 2 - creating server
                 res.end();
             });
         }).catch(error => {
-            console.log(error);
+            //console.log(error);
             res.writeHead(400, { 'Content-Type': 'text/html' });
             res.write('<html><body>Invalid Request</body></html>');
             res.end();
