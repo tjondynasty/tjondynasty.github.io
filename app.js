@@ -20,7 +20,7 @@ var server = http.createServer((req, res) => {   // 2 - creating server
                 console.log("orgName", orgName);
                 try {
                     const speciesData = await pokedex.getPokemonSpeciesByName(orgName);
-                    isValidPokemon = !speciesData.is_legendary && !speciesData.is_mythical;
+                    isValidPokemon = !speciesData.is_legendary && !speciesData.is_mythical && speciesData.hatch_counter > 49;
                     isGenderless = speciesData.gender_rate == -1;
                     console.log("GENDER RATE", speciesData.gender_rate);
                 } catch (err) { }
