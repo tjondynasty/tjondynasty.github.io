@@ -14,6 +14,8 @@ var server = http.createServer((req, res) => {   // 2 - creating server
             let isValidPokemon = false;
             let orgName = null;
             let isGenderless = false;
+			let isMale = false;
+			let isFemale = false;
             while (!isValidPokemon) {
                 const randomPokemonIndex = getRandomInt(typeResponse.pokemon.length);
                 orgName = typeResponse.pokemon[randomPokemonIndex].pokemon.name;
@@ -22,6 +24,8 @@ var server = http.createServer((req, res) => {   // 2 - creating server
                     const speciesData = await pokedex.getPokemonSpeciesByName(orgName);
                     isValidPokemon = !speciesData.is_legendary && !speciesData.is_mythical && speciesData.hatch_counter > 49;
                     isGenderless = speciesData.gender_rate == -1;
+					isMale = speciesData.gender_rate == 0;
+					isFemale = speciesData.gender_rate == 8;
                     console.log("GENDER RATE", speciesData.gender_rate);
                 } catch (err) { }
             }
@@ -35,6 +39,8 @@ var server = http.createServer((req, res) => {   // 2 - creating server
 
                 let gender = getRandomInt(100) > 50 ? "MALE" : "FEMALE";
                 if (isGenderless) gender = "GENDERLESS";
+				if (isMale) gender = "MALE";
+				if (isFemale) gender = "FEMALE";
                 // GENERATE RANDOM MOVES HERE
                 let validMoveList = [];
                 moves.forEach(moveInfo => {
