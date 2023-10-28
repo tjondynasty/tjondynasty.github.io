@@ -70,7 +70,7 @@ var server = http.createServer((req, res) => {   // 2 - creating server
 [div][attr="class","wildpkmnbox"]<br />
 [div][attr="class","wildpkmn"]<br />
 
-[img style="max-width:100%;" src="https://projectpokemon.org/images/normal-sprite/${name}.gif" alt=" "] <br />
+[img style="max-width:100%;" src="${imageUrl}" alt=" "] <br />
 
 [/div][/div]<br />
 
